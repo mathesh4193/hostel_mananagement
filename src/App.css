@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 64px; /* Height of the header */
+  padding-bottom: 20px;
+}

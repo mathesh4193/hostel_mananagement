@@ -1,0 +1,66 @@
+.profile-section {
+  padding: 24px;
+  background: linear-gradient(135deg, #1a2035 0%, #2a3446 100%);
+  color: white;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar {
+  background-color: #384b6c;
+  border-radius: 50%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-profile-btn {
+  margin-left: auto !important;
+}
+
+.info-section {
+  padding: 20px;
+  height: 100%;
+  background: linear-gradient(135deg, #1a2035 0%, #2a3446 100%);
+  color: white;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+
+.management-section {
+  padding: 24px;
+  background: linear-gradient(135deg, #1a2035 0%, #2a3446 100%);
+  color: white;
+}
+
+.management-box {
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.MuiListItemText-secondary {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.MuiListItemIcon-root {
+  color: white !important;
+}
