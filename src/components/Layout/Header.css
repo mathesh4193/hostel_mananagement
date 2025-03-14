@@ -40,8 +40,36 @@
 
 .nav-links {
   display: flex;
-  gap: 16px;
-  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #1a2035;
+    flex-direction: column;
+    padding: 1rem;
+    width: 200px;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .menu-toggle {
+    display: none !important;
+  }
 }
 
 .nav-links button {
@@ -57,4 +85,12 @@
 /* Remove the margin-top since header is not fixed anymore */
 main {
   padding-top: 20px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.features-section {
+  scroll-margin-top: 64px; /* Adjust based on your header height */
 }

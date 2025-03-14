@@ -72,32 +72,32 @@ const About = () => {
                   <tr>
                     <td>Dr. P. Alli, Principal</td>
                     <td>Chief Warden</td>
-                    <td>9443566537</td>
+                    <td><a href="tel:+919443566537" className="phone-link">9443566537</a></td>
                   </tr>
                   <tr>
                     <td>Dr. S. Gopalakrishnan</td>
                     <td>Warden/Men's Hostel</td>
-                    <td>7373018067</td>
+                    <td><a href="tel:+917373018067" className="phone-link">7373018067</a></td>
                   </tr>
                   <tr>
                     <td>Mrs. A. Maheswari</td>
                     <td>Warden/Ladies Hostel</td>
-                    <td>9150343292</td>
+                    <td><a href="tel:+919150343292" className="phone-link">9150343292</a></td>
                   </tr>
                   <tr>
                     <td>Mr. P. Radhakrishnan</td>
                     <td>Deputy Warden / Men's Hostel</td>
-                    <td>9363338971</td>
+                    <td><a href="tel:+919363338971" className="phone-link">9363338971</a></td>
                   </tr>
                   <tr>
                     <td>Mr. R. Thavamani</td>
                     <td>Deputy Warden / Men's Hostel</td>
-                    <td>9566513579</td>
+                    <td><a href="tel:+919566513579" className="phone-link">9566513579</a></td>
                   </tr>
                   <tr>
                     <td>Ms. N. Alima Banu</td>
                     <td>Deputy Warden / Women's Hostel</td>
-                    <td>9944566610</td>
+                    <td><a href="tel:+919944566610" className="phone-link">9944566610</a></td>
                   </tr>
                 </tbody>
               </table>

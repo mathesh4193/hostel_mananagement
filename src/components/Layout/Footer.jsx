@@ -10,7 +10,7 @@ const Footer = () => {
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
             <img src="/Vcet_logo.jpg" alt="VCET Logo" className="footer-logo" />
-            <Typography variant="h6">VCET Hostel Connect</Typography>
+            <Typography variant="h6">VCET Hostel </Typography>
             <Typography variant="body2">
               Velammal College of Engineering and Technology - Madurai<br />
             </Typography>

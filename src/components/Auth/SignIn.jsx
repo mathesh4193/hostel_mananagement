@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { IconButton, InputAdornment } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import './SignIn.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './SignIn.css';
 
 const SignIn = () => {
   const [role, setRole] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);  // Add this state
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleRoleSelection = (selectedRole) => {
@@ -20,27 +20,57 @@ const SignIn = () => {
     setError('');
   };
 
-  const handleTogglePassword = () => {  // Add this function
-    setShowPassword(!showPassword);
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = async (e) => {  // Add this function
+  const validateForm = () => {
+    // Clear previous errors
+    setError('');
+
+    // Validate Roll Number format for students (22CSEA44)
+    const rollNoPattern = /^[0-9]{2}[A-Za-z]{4}[0-9]{2}$/i;
+    if (role === 'Student') {
+      if (!rollNoPattern.test(userId)) {
+        setError('Roll number should be in format: 22CSEA44');
+        return false;
+      }
+      // Convert roll number to uppercase
+      setUserId(userId.toUpperCase());
+    }
+
+    // Validate Password (12 digits)
+    const passwordPattern = /^[0-9]{12}$/;
+    if (!passwordPattern.test(password)) {
+      setError('Password must be exactly 12 digits');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
-        userId: userId,
-        password: password,
-        role: role.toLowerCase()
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        userId,
+        password,
+        role: role.toLowerCase(),
       });
 
-      if (response.data.token) {
+      if (response.data.success) {
+        // Store user data in localStorage
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('role', role.toLowerCase());
         localStorage.setItem('userId', userId);
+        localStorage.setItem('userName', response.data.userName);
 
+        // Navigate based on role
         if (role === 'Student') {
           navigate('/student-dashboard');
-        } else if (role === 'warden') {
+        } else if (role === 'Warden') {
           navigate('/warden-dashboard');
         }
       }
@@ -54,22 +84,18 @@ const SignIn = () => {
     <div className="sign-in-container">
       <h2>Sign In</h2>
       <p>Please select your role and enter your credentials</p>
-      
+
       <div className="role-selection">
-        <button 
-          className={`role-button ${role === 'Student' ? 'selected' : ''}`}
-          onClick={() => handleRoleSelection('Student')}
-        >
-          <div>Student</div>
-          <small>Enter Roll Number & Password</small>
-        </button>
-        <button 
-          className={`role-button ${role === 'warden' ? 'selected' : ''}`}
-          onClick={() => handleRoleSelection('warden')}
-        >
-          <div>Warden</div>
-          <small>Enter Warden ID & Password</small>
-        </button>
+        {['Student', 'Warden'].map((r) => (
+          <button 
+            key={r} 
+            className={`role-button ${role === r ? 'selected' : ''}`} 
+            onClick={() => handleRoleSelection(r)}
+          >
+            <div>{r}</div>
+            <small>Enter {r === 'Student' ? 'Roll Number' : 'Warden ID'} & Password</small>
+          </button>
+        ))}
       </div>
 
       {error && <p className="error-message">{error}</p>}
@@ -77,12 +103,12 @@ const SignIn = () => {
       {role && (
         <form onSubmit={handleSubmit}>
           <label>
-            {role === 'warden' ? 'Warden ID' : 'Roll Number'}
+            {role === 'Warden' ? 'Warden ID' : 'Roll Number'}
             <input 
               type="text" 
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              placeholder={role === 'warden' ? 'Enter warden ID' : 'Enter roll number'}
+              placeholder={`Enter ${role === 'Warden' ? 'Warden ID' : 'Roll Number'}`}
               required
             />
           </label>
@@ -96,11 +122,7 @@ const SignIn = () => {
                 placeholder="Enter your password"
                 required
               />
-              <IconButton
-                className="password-toggle"
-                onClick={handleTogglePassword}
-                edge="end"
-              >
+              <IconButton className="password-toggle" onClick={handleTogglePassword} edge="end">
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </div>

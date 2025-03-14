@@ -1,3 +1,19 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.features-section {
+  scroll-margin-top: 64px;
+}
+
+.hero-section {
+  scroll-margin-top: 64px;
+}
+
+.home-container {
+  scroll-margin-top: 2rem;
+}
+
 .home-container {
   padding: 40px 0;
   min-height: calc(100vh - 160px);
