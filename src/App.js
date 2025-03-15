@@ -9,9 +9,9 @@ import SignIn from './components/Auth/SignIn';
 import StudentDashboard from './components/Dashboard/StudentDashboard';
 import About from './components/About/About';
 import WardenDashboard from './components/Dashboard/WardenDashboard.jsx';  
+import Complaints from './components/Complaints/Complaints';
 import './components/About/About.css';  
 import Leave from './components/Leave/Leave';
-import Complaints from './components/Complaints/Complaints';
 import Mess from './components/Mess/Mess';
 import Room from './components/Room/Room';
 import Security from './components/Security/Security';
@@ -31,7 +31,7 @@ function App() {
             <Route path="/student-dashboard" element={<StudentDashboard />} />
             <Route path="/warden-dashboard" element={<WardenDashboard />} />
             <Route path="/student-dashboard/leave" element={<Leave />} />
-            <Route path="/student-dashboard/complaints" element={<Complaints />} />
+            <Route path="/student-dashboard/Complaints" element={<Complaints />} />
             <Route path="/student-dashboard/mess" element={<Mess />} />
             <Route path="/student-dashboard/room" element={<Room />} />
             <Route path="/student-dashboard/security" element={<Security />} />

@@ -1,170 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Container, Typography, TextField, Button, Paper, Box } from '@mui/material';
+import emailjs from '@emailjs/browser';
 import './Complaints.css';
-import { 
-  Container, Typography, TextField, Button, Box, Paper, 
-  Alert, Snackbar, FormControl, InputLabel, Select, MenuItem,
-  IconButton
-} from '@mui/material';
-import { AttachFile, Send } from '@mui/icons-material';
 
 const Complaints = () => {
-  const [complaint, setComplaint] = useState({
-    title: '',
-    description: '',
-    category: '',
-    file: null
-  });
-  const [errors, setErrors] = useState({});
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: '',
-    severity: 'success'
-  });
+  useEffect(() => {
+    emailjs.init("E5morAfrIunaazqjt");
+  }, []);
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!complaint.title.trim()) newErrors.title = 'Title is required';
-    if (!complaint.description.trim()) newErrors.description = 'Description is required';
-    if (!complaint.category) newErrors.category = 'Category is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const [complaint, setComplaint] = useState({
+    subject: '',
+    description: ''
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     try {
-      // API call would go here
-      // const response = await axios.post('/api/complaints', complaint);
-      
-      setSnackbar({
-        open: true,
-        message: 'Complaint submitted successfully!',
-        severity: 'success'
-      });
-      setComplaint({ title: '', description: '', category: '', file: null });
+      await emailjs.send(
+        'service_qtshmw7',
+        'template_pd8c173',
+        {
+          subject: complaint.subject,
+          message: complaint.description,
+        },
+        'E5morAfrIunaazqjt'
+      );
+
+      alert('Complaint submitted successfully!');
+      setComplaint({ subject: '', description: '' });
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: 'Failed to submit complaint',
-        severity: 'error'
-      });
+      console.error('Error sending complaint:', error);
+      alert('Failed to submit complaint. Please try again.');
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.size <= 5000000) { // 5MB limit
-      setComplaint({ ...complaint, file });
-    } else {
-      setSnackbar({
-        open: true,
-        message: 'File size should be less than 5MB',
-        severity: 'error'
-      });
-    }
+  const handleChange = (e) => {
+    setComplaint({
+      ...complaint,
+      [e.target.name]: e.target.value
+    });
   };
 
   return (
     <Container className="complaints-container">
-      <Typography variant="h4" className="complaint-title" gutterBottom>
+      <Typography variant="h4" className="complaints-title">
         Submit a Complaint
       </Typography>
       
-      <Paper elevation={3} className="complaint-form-paper" sx={{ p: 3, mt: 3 }}>
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          <FormControl fullWidth error={!!errors.category}>
-            <InputLabel>Category</InputLabel>
-            <Select
-              value={complaint.category}
-              label="Category"
-              onChange={(e) => setComplaint({ ...complaint, category: e.target.value })}
-            >
-              <MenuItem value="maintenance">Maintenance</MenuItem>
-              <MenuItem value="facilities">Facilities</MenuItem>
-              <MenuItem value="food">Food</MenuItem>
-              <MenuItem value="other">Other</MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField
-            label="Complaint Title"
-            variant="outlined"
-            required
-            value={complaint.title}
-            onChange={(e) => setComplaint({ ...complaint, title: e.target.value })}
-            error={!!errors.title}
-            helperText={errors.title}
-          />
-          
-          <TextField
-            label="Description"
-            variant="outlined"
-            required
-            multiline
-            rows={4}
-            value={complaint.description}
-            onChange={(e) => setComplaint({ ...complaint, description: e.target.value })}
-            error={!!errors.description}
-            helperText={errors.description}
-          />
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button
-              component="label"
-              variant="outlined"
-              startIcon={<AttachFile />}
-            >
-              Attach File
-              <input
-                type="file"
-                hidden
-                onChange={handleFileChange}
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-              />
-            </Button>
-            {complaint.file && (
-              <Typography variant="body2" color="text.secondary">
-                {complaint.file.name}
-              </Typography>
-            )}
+      <Paper elevation={3} className="complaints-form-container">
+        <form onSubmit={handleSubmit}>
+          <Box className="form-field">
+            <TextField
+              fullWidth
+              label="Subject"
+              name="subject"
+              value={complaint.subject}
+              onChange={handleChange}
+              required
+              placeholder="Enter the subject of your complaint"
+            />
           </Box>
-          
+
+          <Box className="form-field">
+            <TextField
+              fullWidth
+              label="Description"
+              name="description"
+              multiline
+              rows={4}
+              value={complaint.description}
+              onChange={handleChange}
+              required
+              placeholder="Describe your complaint in detail"
+            />
+          </Box>
+
           <Button 
             type="submit" 
             variant="contained" 
-            color="primary"
-            size="large"
-            endIcon={<Send />}
+            color="primary" 
             className="submit-button"
           >
             Submit Complaint
           </Button>
-        </Box>
+        </form>
       </Paper>
-
-      <Box className="contact-info">
-        <Typography variant="h6">
-          For urgent matters, please contact:
-        </Typography>
-        <Typography variant="body2">
-          Email: hostel.support@vcet.ac.in
-        </Typography>
-        <Typography variant="body2">
-          Phone: +91 1234567890
-        </Typography>
-      </Box>
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-      >
-        <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };

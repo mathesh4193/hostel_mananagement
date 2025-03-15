@@ -1,52 +1,53 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useTheme } from '../../context/ThemeContext';
 import './Header.css';
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
+  const { darkMode, toggleTheme } = useTheme();
+  const isLoggedIn = localStorage.getItem('token');
 
-  const handleHomeClick = (e) => {
-    if (location.pathname === '/') {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      navigate('/', { state: { scrollToTop: true } });
-    }
-    setIsMenuOpen(false);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   return (
-    <AppBar position="fixed" className="header">
+    <AppBar position="sticky" className="header">
       <Toolbar>
-        <Box className="logo-container">
+        <div className="logo-container" onClick={() => navigate('/')}>
           <img src="/Vcet_logo.jpg" alt="VCET Logo" className="logo" />
           <Typography variant="h6" className="title">
-            VCET Hostel 
+            VCET HOSTEL
           </Typography>
-        </Box>
-        <Box sx={{ flexGrow: 1 }} />
-        <IconButton
-          color="inherit"
-          aria-label="menu"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          sx={{ display: { md: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Box className={`nav-links ${isMenuOpen ? 'show' : ''}`}>
-          <Button 
-            color="inherit" 
-            onClick={handleHomeClick}
-            component={Link} 
-            to="/"
+        </div>
+        
+        <Box className="nav-links">
+          <Button color="inherit" onClick={() => navigate('/')}>Home</Button>
+          <Button color="inherit" onClick={() => navigate('/about')}>About</Button>
+          <Button color="inherit" onClick={() => navigate('/complaints')}>Complaints</Button>
+          <Button color="inherit" onClick={() => navigate('/attendance')}>Attendance</Button>
+          
+          {isLoggedIn ? (
+            <>
+              <Button color="inherit" onClick={() => navigate('/student-dashboard')}>Dashboard</Button>
+              <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            </>
+          ) : (
+            <Button color="inherit" onClick={() => navigate('/login')}>Login</Button>
+          )}
+          
+          <IconButton
+            color="inherit"
+            onClick={toggleTheme}
+            sx={{ ml: 2 }}
           >
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/login">Sign In</Button>
+            {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>

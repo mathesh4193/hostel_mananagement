@@ -96,7 +96,6 @@ const Home = () => {
       <Box className="features-section" ref={featuresRef}>
         <Typography variant="h3">Our Features</Typography>
         <div className="features-grid">
-          
           <div className="feature-card" onClick={() => handleFeatureClick('about')}>
             <AssignmentIcon className="feature-icon" />
             <Typography variant="h6">About Us</Typography>
@@ -148,6 +147,6 @@ const Home = () => {
       </Box>
     </Container>
   );
-}
+};
 
 export default Home;
