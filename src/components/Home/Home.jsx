@@ -10,6 +10,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import './Home.css';
 import { useLocation } from 'react-router-dom';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,46 +25,28 @@ const Home = () => {
   const handleFeatureClick = (feature) => {
     const isLoggedIn = localStorage.getItem('token');
     
-    // Only about page is accessible without login
-    if (!isLoggedIn && feature !== 'about') {
-      navigate('/login', { state: { from: feature } }); // Pass intended destination
+    // Allow 'about' and 'complaint' pages without login
+    if (!isLoggedIn && feature !== 'about' && feature !== 'complaint') {
+      navigate('/login', { state: { from: feature } });
       return;
     }
 
-    // Navigation map
     const navigationPaths = {
       about: '/about',
       leave: '/student-dashboard/leave',
-      complaint: '/student-dashboard/complaints',
+      complaint: '/complaints',  // Make sure this matches exactly
       mess: '/student-dashboard/mess',
       room: '/student-dashboard/room',
       security: '/student-dashboard/security',
       dashboard: '/student-dashboard',
-      outpass: '/student-dashboard/outpass'
+      outpass: '/student-dashboard/outpass',
+      attendance: '/student-dashboard/attendance'  // Add this line
     };
 
-    // Navigate to the appropriate path
     if (navigationPaths[feature]) {
       navigate(navigationPaths[feature]);
     }
   };
-
-  // In your Home component, add this useEffect
-  useEffect(() => {
-    if (location.state?.scrollToFeatures) {
-      const featuresSection = document.querySelector('.features-section');
-      if (featuresSection) {
-        featuresSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  }, [location]);
-
-  // In your Home component, add this useEffect
-  useEffect(() => {
-    if (location.state?.scrollToTop) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [location]);
 
   return (
     <Container className="home-container">
@@ -143,6 +126,18 @@ const Home = () => {
             <Typography variant="h6">Out Pass</Typography>
             <Typography>Request out pass</Typography>
           </div>
+          
+          {/* Add this new feature card */}
+          <div className="feature-card" onClick={() => handleFeatureClick('attendance')}>
+            <EventAvailableIcon className="feature-icon" />
+            <Typography variant="h6">Attendance</Typography>
+            <Typography>Track daily attendance</Typography>
+          </div>
+          <div className=''>
+            
+          </div>
+          {/* Add more feature cards as needed */}
+
         </div>
       </Box>
     </Container>
